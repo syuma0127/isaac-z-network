@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>人物プロファイル - ISAAC-Z NETWORK</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#060605; --panel:#0F110C; --line:#2A2E22; --line-dim:#1A1C14;
+    --paper:#C9C6B4; --paper-dim:#7A785F; --amber:#C4923A; --scope:#3FBF8F; --red:#A6402C;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg); color:var(--paper); font-family:'IBM Plex Mono', monospace;
+    min-height:100vh; display:flex; flex-direction:column;
+    position:relative; overflow-x:hidden;
+    animation:pageFade .55s ease-out;
+    background-image:linear-gradient(var(--line-dim) 1px, transparent 1px), linear-gradient(90deg, var(--line-dim) 1px, transparent 1px);
+    background-size:28px 28px;
+  }
+  body::before{
+    content:''; position:fixed; inset:0; pointer-events:none; background:linear-gradient(90deg, rgba(63,191,143,0.06), transparent 22%, transparent 78%, rgba(196,146,58,0.07)); mix-blend-mode:screen; animation:scanSweep 7s linear infinite; opacity:0.8;
+  }
+  @keyframes pageFade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+  @keyframes scanSweep{ from{transform:translateX(-100%);} to{transform:translateX(100%);} }
+
+  header{ border-bottom:2px solid var(--amber); padding:24px 32px; background:linear-gradient(180deg, rgba(12,13,10,0.86), rgba(6,6,5,0.75)); position:relative; }
+  header::after{ content:''; position:absolute; left:32px; right:32px; bottom:0; height:1px; background:linear-gradient(90deg, transparent, var(--amber), transparent); opacity:0.4; width:calc(100% - 64px); }
+  .back-link{ display:inline-block; margin-bottom:12px; color:var(--scope); text-decoration:none; font-size:12px; letter-spacing:0.1em; }
+  .back-link:hover{ color:var(--amber); }
+  h1{ font-family:'Oswald',sans-serif; font-weight:700; font-size:32px; margin-bottom:8px; }
+  .subtitle{ color:var(--paper-dim); font-size:13px; }
+
+  main{ flex:1; padding:40px 32px; max-width:1000px; margin:0 auto; width:100%; }
+
+  .dossier-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:24px; }
+
+  .profile-card{ background:linear-gradient(135deg, rgba(15,17,12,0.95), rgba(10,10,8,0.92)); border:1px solid var(--line); padding:20px; position:relative; transition:all 0.3s ease; }
+  .profile-card:hover{ border-color:var(--scope); box-shadow:0 0 16px rgba(63,191,143,0.12); transform:translateY(-2px); }
+  .profile-card::before{ content:''; position:absolute; top:-1px; left:-1px; width:10px; height:10px; border:2px solid var(--amber); border-right:none; border-bottom:none; }
+  .profile-card::after{ content:''; position:absolute; bottom:-1px; right:-1px; width:10px; height:10px; border:2px solid var(--amber); border-left:none; border-top:none; }
+
+  .profile-status{ display:inline-block; font-size:9px; padding:4px 8px; background:rgba(196,146,58,0.2); border:1px solid var(--amber); color:var(--amber); letter-spacing:0.1em; margin-bottom:12px; }
+  .profile-status.threat{ background:rgba(166,64,44,0.2); border-color:var(--red); color:var(--red); }
+
+  .profile-name{ font-family:'Oswald',sans-serif; font-weight:700; font-size:18px; margin-bottom:6px; }
+  .profile-title{ font-size:11px; color:var(--scope); letter-spacing:0.1em; margin-bottom:12px; }
+  
+  .profile-info{ font-size:11px; color:var(--paper-dim); line-height:1.6; }
+  .info-line{ margin-bottom:6px; }
+  .info-label{ color:var(--amber); }
+
+  .section-title{ font-family:'Oswald',sans-serif; font-weight:700; font-size:20px; color:var(--amber); margin-top:40px; margin-bottom:20px; border-bottom:1px solid var(--line); padding-bottom:10px; }
+
+  footer{ padding:20px 32px; font-size:11px; color:var(--paper-dim); text-align:center; border-top:1px solid var(--line-dim); margin-top:40px; }
+
+  @media (max-width:980px){ main{ padding:24px 16px; } header{ padding:20px 16px; } .dossier-grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="back-link">&lt; RETURN TO PORTAL</a>
+  <h1>MODULE 06 人物プロファイル</h1>
+  <div class="subtitle">各勢力を率いる人物や要注意人物の監視名簿を表示します</div>
+</header>
+
+<main>
+  <div class="section-title">≡ PRIMARY LEADERSHIP</div>
+  <div class="dossier-grid">
+    <div class="profile-card">
+      <div class="profile-status">現職指導者</div>
+      <div class="profile-name">田中 高志</div>
+      <div class="profile-title">革新統一戦線 最高指導者</div>
+      <div class="profile-info">
+        <div class="info-line"><span class="info-label">年齢:</span> 56歳</div>
+        <div class="info-line"><span class="info-label">背景:</span> 政治学博士、元外交官</div>
+        <div class="info-line"><span class="info-label">知名度:</span> ████████░ 高</div>
+        <div class="info-line"><span class="info-label">リスク評価:</span> 中程度</div>
+        <div class="info-line">改革志向で知られているが、急進派との路線対立により求心力が低下。内部分裂を統制できるかが注視されている。</div>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-status threat">監視対象</div>
+      <div class="profile-name">李 傑</div>
+      <div class="profile-title">大陸ブロック 副指導者</div>
+      <div class="profile-info">
+        <div class="info-line"><span class="info-label">年齢:</span> 62歳</div>
+        <div class="info-line"><span class="info-label">背景:</span> 軍事戦略家、武装勢力出身</div>
+        <div class="info-line"><span class="info-label">知名度:</span> ████████░ 高</div>
+        <div class="info-line"><span class="info-label">リスク評価:</span> 高い</div>
+        <div class="info-line">攻撃的な対外政策で知られている。複数の境界摩擦事件に関与が疑われている。</div>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-status">現職指導者</div>
+      <div class="profile-name">Sarah Chen</div>
+      <div class="profile-title">自由民主陣営 中央司令官</div>
+      <div class="profile-info">
+        <div class="info-line"><span class="info-label">年齢:</span> 48歳</div>
+        <div class="info-line"><span class="info-label">背景:</span> 経済学者、企業経営者</div>
+        <div class="info-line"><span class="info-label">知名度:</span> ███████░░ 中高</div>
+        <div class="info-line"><span class="info-label">リスク評価:</span> 低い</div>
+        <div class="info-line">経済統合政策で知られている。安定志向で同盟諸国との関係維持に注力している。</div>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-status">現職指導者</div>
+      <div class="profile-name">山本 太郎</div>
+      <div class="profile-title">太平洋戦略機構 最高司令官</div>
+      <div class="profile-info">
+        <div class="info-line"><span class="info-label">年齢:</span> 55歳</div>
+        <div class="info-line"><span class="info-label">背景:</span> 海事戦略専門家、海軍出身</div>
+        <div class="info-line"><span class="info-label">知名度:</span> ██████░░░ 中</div>
+        <div class="info-line"><span class="info-label">リスク評価:</span> 中程度</div>
+        <div class="info-line">海上資源採掘権をめぐる交渉の主要人物。現在、新秩序評議会との対立関係が深化。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">≡ WATCH LIST / HIGH PRIORITY INDIVIDUALS</div>
+  <div class="dossier-grid">
+    <div class="profile-card">
+      <div class="profile-status threat">要警戒</div>
+      <div class="profile-name">アレクサンダー・イワノフ</div>
+      <div class="profile-title">新秩序評議会 戦略本部長</div>
+      <div class="profile-info">
+        <div class="info-line"><span class="info-label">年齢:</span> 64歳</div>
+        <div class="info-line"><span class="info-label">背景:</span> 情報機関高官、スパイマスター</div>
+        <div class="info-line"><span class="info-label">知名度:</span> ███░░░░░░ 低</div>
+        <div class="info-line"><span class="info-label">リスク評価:</span> 極度に高い</div>
+        <div class="info-line">複数の情報漏洩・工作活動・諜報作戦に関与が疑われている。身元確認も困難。</div>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-status threat">監視中</div>
+      <div class="profile-name">水野 美咲</div>
+      <div class="profile-title">革新統一戦線 急進派リーダー</div>
+      <div class="profile-info">
+        <div class="info-line"><span class="info-label">年齢:</span> 38歳</div>
+        <div class="info-line"><span class="info-label">背景:</span> 活動家、カリスマ指導者</div>
+        <div class="info-line"><span class="info-label">知名度:</span> █████░░░░ 中</div>
+        <div class="info-line"><span class="info-label">リスク評価:</span> 高い</div>
+        <div class="info-line">激進的改革を主張し、現指導部との関係が悪化。分裂勢力の形成に主導的役割を担う可能性。</div>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-status threat">監視対象</div>
+      <div class="profile-name">村上 健太</div>
+      <div class="profile-title">環太平洋ブロック 統合推進官</div>
+      <div class="profile-info">
+        <div class="info-line"><span class="info-label">年齢:</span> 52歳</div>
+        <div class="info-label">背景:</span> 外交官、交渉人</div>
+        <div class="info-line"><span class="info-label">知名度:</span> ████░░░░░ 中低</div>
+        <div class="info-line"><span class="info-label">リスク評価:</span> 中程度</div>
+        <div class="info-line">複数の勢力との二重・三重の交渉に携わる疑い。真の忠誠対象が不明。</div>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-status threat">要警戒</div>
+      <div class="profile-name">未確認対象：コード名「PHANTOM」</div>
+      <div class="profile-title">不明 / 幻の指導者？</div>
+      <div class="profile-info">
+        <div class="info-line"><span class="info-label">年齢:</span> 不明</div>
+        <div class="info-line"><span class="info-label">背景:</span> 不明</div>
+        <div class="info-line"><span class="info-label">知名度:</span> █░░░░░░░░ 低</div>
+        <div class="info-line"><span class="info-label">リスク評価:</span> 不確定（極度に高い可能性あり）</div>
+        <div class="info-line">複数のインテリジェンスレポートで言及されるが、身元・活動内容・存在確認まで不明。第4勢力の領導者と推測される。</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  ISAAC-Z SERVER — MODULE 06 PERSONNEL DOSSIER V1 — 分類情報取扱注意
+</footer>
+
+</body>
+</html>

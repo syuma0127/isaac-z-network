@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>兵装仕様書 - ISAAC-Z NETWORK</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#060605; --panel:#0F110C; --line:#2A2E22; --line-dim:#1A1C14;
+    --paper:#C9C6B4; --paper-dim:#7A785F; --amber:#C4923A; --scope:#3FBF8F; --red:#A6402C;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg); color:var(--paper); font-family:'IBM Plex Mono', monospace;
+    min-height:100vh; display:flex; flex-direction:column;
+    position:relative; overflow-x:hidden;
+    animation:pageFade .55s ease-out;
+    background-image:linear-gradient(var(--line-dim) 1px, transparent 1px), linear-gradient(90deg, var(--line-dim) 1px, transparent 1px);
+    background-size:28px 28px;
+  }
+  body::before{
+    content:''; position:fixed; inset:0; pointer-events:none; background:linear-gradient(90deg, rgba(63,191,143,0.06), transparent 22%, transparent 78%, rgba(196,146,58,0.07)); mix-blend-mode:screen; animation:scanSweep 7s linear infinite; opacity:0.8;
+  }
+  @keyframes pageFade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+  @keyframes scanSweep{ from{transform:translateX(-100%);} to{transform:translateX(100%);} }
+
+  header{ border-bottom:2px solid var(--amber); padding:24px 32px; background:linear-gradient(180deg, rgba(12,13,10,0.86), rgba(6,6,5,0.75)); position:relative; }
+  header::after{ content:''; position:absolute; left:32px; right:32px; bottom:0; height:1px; background:linear-gradient(90deg, transparent, var(--amber), transparent); opacity:0.4; width:calc(100% - 64px); }
+  .back-link{ display:inline-block; margin-bottom:12px; color:var(--scope); text-decoration:none; font-size:12px; letter-spacing:0.1em; }
+  .back-link:hover{ color:var(--amber); }
+  h1{ font-family:'Oswald',sans-serif; font-weight:700; font-size:32px; margin-bottom:8px; }
+  .subtitle{ color:var(--paper-dim); font-size:13px; }
+
+  main{ flex:1; padding:40px 32px; max-width:1100px; margin:0 auto; width:100%; }
+
+  .spec-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:32px; }
+
+  .spec-card{ background:rgba(10,10,8,0.8); border:2px solid var(--line); padding:24px; position:relative; }
+  .spec-card::before{ content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, var(--amber), transparent); }
+
+  .spec-faction{ font-size:10px; color:var(--amber); letter-spacing:0.15em; margin-bottom:8px; text-transform:uppercase; }
+  .spec-title{ font-family:'Oswald',sans-serif; font-weight:700; font-size:20px; margin-bottom:16px; }
+
+  .spec-item{ margin-bottom:14px; }
+  .spec-label{ font-size:10px; color:var(--amber); letter-spacing:0.1em; text-transform:uppercase; }
+  .spec-value{ font-size:12px; color:var(--paper); margin-top:4px; }
+
+  .spec-bar{ height:6px; background:rgba(255,255,255,0.1); border:1px solid var(--line); margin-top:4px; position:relative; overflow:hidden; }
+  .spec-fill{ height:100%; background:linear-gradient(90deg, var(--scope), var(--amber)); }
+
+  .section-title{ font-family:'Oswald',sans-serif; font-weight:700; font-size:22px; color:var(--amber); margin-top:40px; margin-bottom:24px; border-bottom:1px solid var(--line); padding-bottom:12px; }
+
+  footer{ padding:20px 32px; font-size:11px; color:var(--paper-dim); text-align:center; border-top:1px solid var(--line-dim); margin-top:40px; }
+
+  @media (max-width:980px){ main{ padding:24px 16px; } header{ padding:20px 16px; } .spec-grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="back-link">&lt; RETURN TO PORTAL</a>
+  <h1>MODULE 07 兵装仕様書</h1>
+  <div class="subtitle">勢力ごとの兵器やテクノロジーを設計図風に解説する仕様書です</div>
+</header>
+
+<main>
+  <div class="section-title">≡ PRIMARY ARSENAL SYSTEMS</div>
+
+  <div class="spec-grid">
+    <div class="spec-card">
+      <div class="spec-faction">革新統一戦線</div>
+      <div class="spec-title">NEURO-COMMAND NETWORK</div>
+      <div class="spec-item">
+        <div class="spec-label">System Type</div>
+        <div class="spec-value">統一指令システム / A.I. 支援型戦術制御</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Combat Effectiveness</div>
+        <div class="spec-bar"><div class="spec-fill" style="width:78%;"></div></div>
+        <div class="spec-value">78% (Advanced Neural Processing)</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Deployment Range</div>
+        <div class="spec-value">東アジア全域 + 太平洋沿岸地域</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Status</div>
+        <div class="spec-value">OPERATIONAL / Internal Conflict による効率低下懸念</div>
+      </div>
+    </div>
+
+    <div class="spec-card">
+      <div class="spec-faction">自由民主陣営</div>
+      <div class="spec-title">ECONOMIC LEVERAGE SUITE</div>
+      <div class="spec-item">
+        <div class="spec-label">System Type</div>
+        <div class="spec-value">経済支配システム / 金融・資源流通制御</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Effectiveness Rating</div>
+        <div class="spec-bar"><div class="spec-fill" style="width:82%;"></div></div>
+        <div class="spec-value">82% (Proven economic sanctions)</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Coverage Area</div>
+        <div class="spec-value">Global Financial Networks, Trade Routes</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Status</div>
+        <div class="spec-value">FULLY OPERATIONAL / High effectiveness</div>
+      </div>
+    </div>
+
+    <div class="spec-card">
+      <div class="spec-faction">新秩序評議会</div>
+      <div class="spec-title">INFORMATION DOMINANCE SYSTEM</div>
+      <div class="spec-item">
+        <div class="spec-label">System Type</div>
+        <div class="spec-value">諜報・情報戦支配システム / Cyber Warfare</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Cyber Capability</div>
+        <div class="spec-bar"><div class="spec-fill" style="width:88%;"></div></div>
+        <div class="spec-value">88% (Advanced espionage operations)</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Operational Range</div>
+        <div class="spec-value">Global (Network-based, boundary-less)</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Status</div>
+        <div class="spec-value">OPERATIONAL / Continuous evolution</div>
+      </div>
+    </div>
+
+    <div class="spec-card">
+      <div class="spec-faction">太平洋戦略機構</div>
+      <div class="spec-title">MARITIME STRIKE FORCE</div>
+      <div class="spec-item">
+        <div class="spec-label">System Type</div>
+        <div class="spec-value">海上防衛・制海権システム / Naval Dominance</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Naval Combat Power</div>
+        <div class="spec-bar"><div class="spec-fill" style="width:74%;"></div></div>
+        <div class="spec-value">74% (Pacific Ocean superiority)</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Coverage Area</div>
+        <div class="spec-value">Pacific Ocean, Territorial Waters, Trade Routes</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Status</div>
+        <div class="spec-value">OPERATIONAL / Resource disputes ongoing</div>
+      </div>
+    </div>
+
+    <div class="spec-card">
+      <div class="spec-faction">大陸ブロック</div>
+      <div class="spec-title">LANDMASS CONTROL ARRAY</div>
+      <div class="spec-item">
+        <div class="spec-label">System Type</div>
+        <div class="spec-value">陸上防衛・領土統制システム / Ground Dominance</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Ground Combat Power</div>
+        <div class="spec-bar"><div class="spec-fill" style="width:86%;"></div></div>
+        <div class="spec-value">86% (Continental land superiority)</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Territorial Control</div>
+        <div class="spec-value">Central Asia, Eastern Europe, Border regions</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Status</div>
+        <div class="spec-value">OPERATIONAL / Aggressive expansion noted</div>
+      </div>
+    </div>
+
+    <div class="spec-card">
+      <div class="spec-faction">環太平洋ブロック</div>
+      <div class="spec-title">COALITION INTEROP NETWORK</div>
+      <div class="spec-item">
+        <div class="spec-label">System Type</div>
+        <div class="spec-value">同盟統合・相互運用システム / Alliance Coordination</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Coordination Effectiveness</div>
+        <div class="spec-bar"><div class="spec-fill" style="width:64%;"></div></div>
+        <div class="spec-value">64% (Multi-faction integration challenges)</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Alliance Scope</div>
+        <div class="spec-value">APAC Region (Pacific + Southeast Asia)</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Status</div>
+        <div class="spec-value">NEW / Consolidation in progress</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">≡ ADVANCED TECHNOLOGY RESEARCH</div>
+
+  <div class="spec-grid">
+    <div class="spec-card">
+      <div class="spec-faction">MULTI-FACTION (Rumored)</div>
+      <div class="spec-title">AUTONOMOUS DEFENSE DRONE SYSTEM</div>
+      <div class="spec-item">
+        <div class="spec-label">Classification</div>
+        <div class="spec-value">未確認 / Highly Classified</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Capability Level</div>
+        <div class="spec-bar"><div class="spec-fill" style="width:92%;"></div></div>
+        <div class="spec-value">UNKNOWN (Reports suggest extreme lethality)</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Status</div>
+        <div class="spec-value">DEVELOPMENT / Technology theft incidents reported</div>
+      </div>
+    </div>
+
+    <div class="spec-card">
+      <div class="spec-faction">MULTI-FACTION (Suspected)</div>
+      <div class="spec-title">NEURAL INTERFACE WEAPON SYSTEM</div>
+      <div class="spec-item">
+        <div class="spec-label">Classification</div>
+        <div class="spec-value">最高機密 / Rumored existence</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Theoretical Power</div>
+        <div class="spec-bar"><div class="spec-fill" style="width:85%;"></div></div>
+        <div class="spec-value">UNKNOWN (Psychological warfare capability)</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-label">Status</div>
+        <div class="spec-value">UNKNOWN / Existence unconfirmed</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  ISAAC-Z SERVER — MODULE 07 TECH SPECS V1 — 最高機密取扱注意
+</footer>
+
+</body>
+</html>

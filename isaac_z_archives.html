@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>機密档案室 - ISAAC-Z NETWORK</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#060605; --panel:#0F110C; --line:#2A2E22; --line-dim:#1A1C14;
+    --paper:#C9C6B4; --paper-dim:#7A785F; --amber:#C4923A; --scope:#3FBF8F; --red:#A6402C;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg); color:var(--paper); font-family:'IBM Plex Mono', monospace;
+    min-height:100vh; display:flex; flex-direction:column;
+    position:relative; overflow-x:hidden;
+    animation:pageFade .55s ease-out;
+    background-image:linear-gradient(var(--line-dim) 1px, transparent 1px), linear-gradient(90deg, var(--line-dim) 1px, transparent 1px);
+    background-size:28px 28px;
+  }
+  body::before{
+    content:''; position:fixed; inset:0; pointer-events:none; background:linear-gradient(90deg, rgba(63,191,143,0.06), transparent 22%, transparent 78%, rgba(196,146,58,0.07)); mix-blend-mode:screen; animation:scanSweep 7s linear infinite; opacity:0.8;
+  }
+  @keyframes pageFade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+  @keyframes scanSweep{ from{transform:translateX(-100%);} to{transform:translateX(100%);} }
+  @keyframes blink{ 0%{opacity:1;} 49%{opacity:1;} 50%{opacity:0.4;} 99%{opacity:0.4;} 100%{opacity:1;} }
+
+  header{ border-bottom:2px solid var(--amber); padding:24px 32px; background:linear-gradient(180deg, rgba(12,13,10,0.86), rgba(6,6,5,0.75)); position:relative; }
+  header::after{ content:''; position:absolute; left:32px; right:32px; bottom:0; height:1px; background:linear-gradient(90deg, transparent, var(--amber), transparent); opacity:0.4; width:calc(100% - 64px); }
+  .back-link{ display:inline-block; margin-bottom:12px; color:var(--scope); text-decoration:none; font-size:12px; letter-spacing:0.1em; }
+  .back-link:hover{ color:var(--amber); }
+  h1{ font-family:'Oswald',sans-serif; font-weight:700; font-size:32px; margin-bottom:8px; }
+  .subtitle{ color:var(--paper-dim); font-size:13px; }
+
+  main{ flex:1; padding:40px 32px; max-width:900px; margin:0 auto; width:100%; }
+
+  .access-denied{ text-align:center; padding:80px 40px; }
+  .warning-symbol{ font-size:48px; color:var(--red); margin-bottom:20px; }
+  .denied-text{ font-size:16px; color:var(--red); margin-bottom:20px; letter-spacing:0.1em; }
+  .denied-desc{ font-size:12px; color:var(--paper-dim); margin-bottom:40px; line-height:1.8; }
+  .censored-data{ background:rgba(166,64,44,0.2); border:1px solid var(--red); padding:20px; margin-bottom:20px; }
+  .censored-line{ background:var(--paper-dim); height:12px; margin:8px 0; animation:pulse 2s ease-in-out infinite; }
+
+  .unlock-btn{ background:transparent; border:1px solid var(--red); color:var(--red); padding:12px 24px; cursor:pointer; font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.1em; transition:all 0.3s ease; }
+  .unlock-btn:hover{ background:rgba(166,64,44,0.2); }
+
+  .revealed{ display:none; }
+  .revealed.show{ display:block; animation:revealFade 0.5s ease-out; }
+
+  @keyframes revealFade{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+  @keyframes pulse{ 0%{opacity:0.6;} 50%{opacity:1;} 100%{opacity:0.6;} }
+
+  .archive-section{ margin-top:40px; border-top:1px solid var(--line); padding-top:24px; }
+  .section-title{ font-family:'Oswald',sans-serif; font-weight:700; font-size:20px; color:var(--amber); margin-bottom:20px; }
+
+  .record{ background:rgba(10,10,8,0.6); border:1px solid var(--line); padding:20px; margin-bottom:16px; transition:all 0.2s ease; }
+  .record:hover{ border-color:var(--scope); }
+  .record-title{ font-family:'Oswald',sans-serif; font-weight:600; font-size:14px; margin-bottom:8px; }
+  .record-info{ font-size:11px; color:var(--paper-dim); margin-bottom:8px; }
+  .record-content{ font-size:12px; color:var(--paper-dim); line-height:1.6; }
+
+  footer{ padding:20px 32px; font-size:11px; color:var(--paper-dim); text-align:center; border-top:1px solid var(--line-dim); margin-top:40px; }
+
+  @media (max-width:980px){ main{ padding:24px 16px; } header{ padding:20px 16px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="back-link">&lt; RETURN TO PORTAL</a>
+  <h1>MODULE 05 機密档案室</h1>
+  <div class="subtitle">過去の歴史、禁断のデータ、大内紛ログを閲覧できる機密記録ページです</div>
+</header>
+
+<main>
+  <div class="access-denied" id="accessDenied">
+    <div class="warning-symbol">⚠ ◆ ⚠</div>
+    <div class="denied-text">⚠ ACCESS DENIED ⚠</div>
+    <div class="denied-desc">この機密档案室へのアクセスには最高レベルの認可が必要です。<br>禁断のデータ・大内紛ログは、認可ユーザーのみ閲覧可能です。</div>
+    
+    <div class="censored-data">
+      <div class="censored-line"></div>
+      <div class="censored-line" style="width:85%;"></div>
+      <div class="censored-line" style="width:70%;"></div>
+    </div>
+
+    <button class="unlock-btn" onclick="revealArchives()">★ OVERRIDE SECURITY / REVEAL ARCHIVES ★</button>
+  </div>
+
+  <div class="revealed" id="revealedContent">
+    <div class="archive-section">
+      <div class="section-title">≡ FORBIDDEN HISTORY LOG</div>
+      
+      <div class="record">
+        <div class="record-title">大内紛事件：革新統一戦線 初代分裂</div>
+        <div class="record-info">2025年 | 分類：極秘 | ステータス：封印</div>
+        <div class="record-content">初期メンバー間の路線対立により、初めての公式な分裂危機が発生。中道派と急進派の意見衝突により、数百万人規模の支持層の離脱が記録された。当時の指導部は情報操作により、国内外への情報流出を封止しようとした。</div>
+      </div>
+
+      <div class="record">
+        <div class="record-title">秘密同盟：環太平洋ブロック 成立前交渉記録</div>
+        <div class="record-info">2024年 | 分類：極秘 | ステータス：封印</div>
+        <div class="record-content">現在の環太平洋ブロックが公式発足する前、複数の国家間で行われた非公式な交渉記録。各国の思惑・利権・秘密合意等の詳細が記録されている。この交渉過程で、複数の大陸勢力との密約が成立したとされている。</div>
+      </div>
+
+      <div class="record">
+        <div class="record-title">技術流出事件：兵装テクノロジー盗用事件</div>
+        <div class="record-info">2024年 | 分類：最高機密 | ステータス：進行中</div>
+        <div class="record-content">複数の勢力から高度な兵装テクノロジーが盗用されたと考えられる事件。黒幕の特定にはいたっていないが、複数の重要人物の失踪と関連があると推測される。当時の調査レポートは現在も秘密裏に保管されている。</div>
+      </div>
+
+      <div class="record">
+        <div class="record-title">勢力再編の真実：自由民主陣営の真の統合過程</div>
+        <div class="record-info">2023年 | 分類：極秘 | ステータス：限定公開</div>
+        <div class="record-content">公式には「平和的統合」とされている事件だが、実際には複数の強制的な吸収・併合プロセスが含まれていたと記録されている。小規模勢力の首脳部が行方不明になった事例も複数件ある。</div>
+      </div>
+    </div>
+
+    <div class="archive-section">
+      <div class="section-title">≡ SHADOW DATA VAULT</div>
+      
+      <div class="record">
+        <div class="record-title">地政学的暗闘：太平洋戦略機構 vs 新秩序評議会</div>
+        <div class="record-info">進行中 | 分類：最高機密 | ステータス：オープンエンド</div>
+        <div class="record-content">両勢力による海上資源採掘権をめぐる隠蔽された紛争。公式な交渉の裏で、複数の遠回しな嫌がらせ・経済封鎖・スパイ活動が行われていたと報告されている。国際的な仲介者も両勢力の本当の意図を把握していない可能性がある。</div>
+      </div>
+
+      <div class="record">
+        <div class="record-title">幻の第4イデオロギー勢力</div>
+        <div class="record-info">時期不明 | 分類：最高機密 | ステータス：存在確認不可</div>
+        <div class="record-content">複数のインテリジェンスレポートで言及される、公式には存在しない第4の勢力。その目的・構成員・活動領域は全て不明。「それが本当に存在したのか」「幻想ではないのか」についてさえ、議論は決着していない。</div>
+      </div>
+    </div>
+
+    <p style="margin-top:40px; font-size:11px; color:var(--paper-dim); text-align:center;">
+      警告：この情報は厳重に保管されています。外部への流出は重大な違法行為です。
+    </p>
+  </div>
+
+</main>
+
+<footer>
+  ISAAC-Z SERVER — MODULE 05 ARCHIVES V1 — 最高機密取扱注意
+</footer>
+
+<script>
+function revealArchives(){
+  const denied=document.getElementById('accessDenied');
+  const revealed=document.getElementById('revealedContent');
+  denied.style.display='none';
+  revealed.classList.add('show');
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>戦況日誌 - ISAAC-Z NETWORK</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#060605; --panel:#0F110C; --line:#2A2E22; --line-dim:#1A1C14;
+    --paper:#C9C6B4; --paper-dim:#7A785F; --amber:#C4923A; --scope:#3FBF8F; --red:#A6402C;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg); color:var(--paper); font-family:'IBM Plex Mono', monospace;
+    min-height:100vh; display:flex; flex-direction:column;
+    position:relative; overflow-x:hidden;
+    animation:pageFade .55s ease-out;
+    background-image:linear-gradient(var(--line-dim) 1px, transparent 1px), linear-gradient(90deg, var(--line-dim) 1px, transparent 1px);
+    background-size:28px 28px;
+  }
+  body::before{
+    content:''; position:fixed; inset:0; pointer-events:none; background:linear-gradient(90deg, rgba(63,191,143,0.06), transparent 22%, transparent 78%, rgba(196,146,58,0.07)); mix-blend-mode:screen; animation:scanSweep 7s linear infinite; opacity:0.8;
+  }
+  @keyframes pageFade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+  @keyframes scanSweep{ from{transform:translateX(-100%);} to{transform:translateX(100%);} }
+  @keyframes blink{ 0%{opacity:1;} 49%{opacity:1;} 50%{opacity:0.4;} 99%{opacity:0.4;} 100%{opacity:1;} }
+
+  header{ border-bottom:2px solid var(--amber); padding:24px 32px; background:linear-gradient(180deg, rgba(12,13,10,0.86), rgba(6,6,5,0.75)); }
+  header::after{ content:''; position:absolute; left:32px; right:32px; bottom:0; height:1px; background:linear-gradient(90deg, transparent, var(--amber), transparent); opacity:0.4; width:calc(100% - 64px); }
+  .back-link{ display:inline-block; margin-bottom:12px; color:var(--scope); text-decoration:none; font-size:12px; letter-spacing:0.1em; }
+  .back-link:hover{ color:var(--amber); }
+  h1{ font-family:'Oswald',sans-serif; font-weight:700; font-size:32px; margin-bottom:8px; }
+  .subtitle{ color:var(--paper-dim); font-size:13px; }
+
+  main{ flex:1; padding:40px 32px; max-width:1000px; margin:0 auto; width:100%; }
+
+  .log-entry{ border-left:2px solid var(--line); padding-left:20px; margin-bottom:28px; position:relative; }
+  .log-entry::before{ content:''; position:absolute; left:-5px; top:8px; width:8px; height:8px; border-radius:50%; background:var(--scope); }
+  .log-date{ font-size:11px; color:var(--amber); letter-spacing:0.1em; margin-bottom:4px; }
+  .log-title{ font-family:'Oswald',sans-serif; font-weight:600; font-size:18px; margin-bottom:8px; }
+  .log-desc{ font-size:12px; color:var(--paper-dim); line-height:1.6; margin-bottom:6px; }
+  .log-status{ font-size:11px; color:var(--scope); letter-spacing:0.08em; }
+
+  .section-title{ font-family:'Oswald',sans-serif; font-weight:700; font-size:20px; margin-top:40px; margin-bottom:20px; color:var(--amber); border-bottom:1px solid var(--line); padding-bottom:10px; }
+
+  footer{ padding:20px 32px; font-size:11px; color:var(--paper-dim); text-align:center; border-top:1px solid var(--line-dim); }
+
+  @media (max-width:980px){ main{ padding:24px 16px; } header{ padding:20px 16px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="back-link">&lt; RETURN TO PORTAL</a>
+  <h1>MODULE 03 戦況日誌</h1>
+  <div class="subtitle">分裂・統合・新設など、勢力にまつわる出来事の時系列記録</div>
+</header>
+
+<main>
+  <div class="section-title">≡ RECENT ACTIVITY LOG</div>
+
+  <div class="log-entry">
+    <div class="log-date">2026-07-19</div>
+    <div class="log-title">SYSTEM UPDATE: NETWORK EXPANSION</div>
+    <div class="log-desc">ISAAC-Z統合ネットワークの全モジュール実装が完了。防空管制マップ、人物プロファイル、兵装仕様書、傍受通信端末を本ポータルに統合。</div>
+    <div class="log-status">★ PRIORITY CRITICAL</div>
+  </div>
+
+  <div class="log-entry">
+    <div class="log-date">2026-07-18</div>
+    <div class="log-title">FACTION ALLIANCE: 東洋同盟 FORMATION</div>
+    <div class="log-desc">東アジア地域を主軸とする新興勢力連合が正式発足。従来の三極構造に新たな局面が出現。</div>
+    <div class="log-status">STATUS: CONFIRMED</div>
+  </div>
+
+  <div class="log-entry">
+    <div class="log-date">2026-07-15</div>
+    <div class="log-title">INTERNAL CONFLICT: 革新統一戦線 SPLIT</div>
+    <div class="log-desc">意思統一会議で路線対立が表面化。中道派と急進派の分裂懸念が高まる。一部幹部の本部離脱が確認された。</div>
+    <div class="log-status">★ ALERT: UNSTABLE</div>
+  </div>
+
+  <div class="log-entry">
+    <div class="log-date">2026-07-10</div>
+    <div class="log-title">DIPLOMATIC INCIDENT: 新秩序評議会 BOUNDARY CLASH</div>
+    <div class="log-desc">影響圏の境界線解釈をめぐる摩擦事件が発生。両勢力の監視員による小規模衝突と報告あり。</div>
+    <div class="log-status">STATUS: ONGOING</div>
+  </div>
+
+  <div class="log-entry">
+    <div class="log-date">2026-07-01</div>
+    <div class="log-title">LEADERSHIP CHANGE: 自由民主陣営 NEW DIRECTOR</div>
+    <div class="log-desc">中央司令部の責任者交代。新指導部は経済統合政策を強化することを宣言。</div>
+    <div class="log-status">STATUS: OFFICIAL</div>
+  </div>
+
+  <div class="section-title">≡ MAJOR CONSOLIDATIONS (Q2 2026)</div>
+
+  <div class="log-entry">
+    <div class="log-date">2026-06-25</div>
+    <div class="log-title">FACTION MERGER: 地政学前衛 + 大陸ブロック</div>
+    <div class="log-desc">中規模勢力同士の統合宣言。合計影響圏人口は約2.1億人に達した。</div>
+    <div class="log-status">MERGER: COMPLETE</div>
+  </div>
+
+  <div class="log-entry">
+    <div class="log-date">2026-06-15</div>
+    <div class="log-title">RESOURCE DISPUTE: 太平洋戦略機構 NEGOTIATION</div>
+    <div class="log-desc">海上資源採掘権をめぐる三者間交渉が開始。仲介者派遣により紛争化を回避。</div>
+    <div class="log-status">STATUS: NEGOTIATING</div>
+  </div>
+
+  <div class="log-entry">
+    <div class="log-date">2026-06-01</div>
+    <div class="log-title">INTELLIGENCE BREACH: グローバルネット防御 SECURITY UPDATE</div>
+    <div class="log-desc">サイバー攻撃への対抗宣言。防御体制の強化と対象勢力への警告が発令された。</div>
+    <div class="log-status">★ SECURITY ALERT</div>
+  </div>
+
+  <div class="section-title">≡ ARCHIVE 2026 Q1</div>
+
+  <div class="log-entry">
+    <div class="log-date">2026-05-20</div>
+    <div class="log-title">NEW FACTION: 環太平洋ブロック ESTABLISHMENT</div>
+    <div class="log-desc">複数の小国家および下位組織が結集し、新たな勢力圏を形成。</div>
+    <div class="log-status">FACTION: NEW</div>
+  </div>
+
+  <div class="log-entry">
+    <div class="log-date">2026-04-10</div>
+    <div class="log-title">STRATEGIC ALLIANCE: ユーラシア同盟 DEEPENED</div>
+    <div class="log-desc">既存同盟のさらなる協力体制構築。軍事・経済・情報面での統合が進行中。</div>
+    <div class="log-status">STATUS: ONGOING</div>
+  </div>
+
+</main>
+
+<footer>
+  ISAAC-Z SERVER — MODULE 03 SITREP LOG V1 — 分類情報取扱注意
+</footer>
+
+<script>
+function updateClock(){
+  const now=new Date();
+  const h=String(now.getHours()).padStart(2,'0');
+  const m=String(now.getMinutes()).padStart(2,'0');
+  document.querySelectorAll('[data-clock]').forEach(e=>e.textContent=h+':'+m);
+}
+setInterval(updateClock, 1000);
+updateClock();
+</script>
+
+</body>
+</html>
