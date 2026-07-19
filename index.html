@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ISAAC-Z NETWORK PORTAL</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#060605; --panel:#0F110C; --line:#2A2E22; --line-dim:#1A1C14;
+    --paper:#C9C6B4; --paper-dim:#7A785F; --amber:#C4923A; --scope:#3FBF8F; --red:#A6402C;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg); color:var(--paper); font-family:'IBM Plex Mono', monospace;
+    min-height:100vh; display:flex; flex-direction:column;
+    background-image:linear-gradient(var(--line-dim) 1px, transparent 1px), linear-gradient(90deg, var(--line-dim) 1px, transparent 1px);
+    background-size:28px 28px;
+  }
+  header{ border-bottom:2px solid var(--amber); padding:32px; text-align:center; }
+  .eyebrow{ font-size:12px; letter-spacing:0.2em; color:var(--amber); }
+  h1{ font-family:'Oswald',sans-serif; font-weight:700; font-size:clamp(30px,6vw,52px); margin-top:10px; }
+  h1 span{ color:var(--scope); }
+  .subtitle{ color:var(--paper-dim); font-size:13px; margin-top:10px; }
+
+  main{ flex:1; display:flex; align-items:center; justify-content:center; padding:40px 24px; }
+  .nav-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:24px; max-width:820px; width:100%; }
+
+  .nav-card{
+    display:block; text-decoration:none; color:inherit;
+    background:var(--panel); border:1px solid var(--line); padding:28px 24px;
+    position:relative; transition:border-color .2s ease, transform .2s ease;
+  }
+  .nav-card:hover{ border-color:var(--scope); transform:translateY(-3px); }
+  .nav-card::before, .nav-card::after{ content:''; position:absolute; width:10px; height:10px; border-color:var(--amber); border-style:solid; }
+  .nav-card::before{ top:-1px; left:-1px; border-width:2px 0 0 2px; }
+  .nav-card::after{ bottom:-1px; right:-1px; border-width:0 2px 2px 0; }
+  .nav-code{ font-size:11px; color:var(--paper-dim); letter-spacing:0.1em; }
+  .nav-title{ font-family:'Oswald',sans-serif; font-weight:600; font-size:24px; margin-top:8px; }
+  .nav-desc{ font-size:12px; color:var(--paper-dim); margin-top:10px; line-height:1.6; }
+  .nav-go{ font-size:11px; color:var(--scope); margin-top:16px; letter-spacing:0.08em; }
+
+  footer{ padding:20px 32px; font-size:11px; color:var(--paper-dim); text-align:center; border-top:1px solid var(--line-dim); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">ISAAC-Z HIGH COMMAND // NETWORK PORTAL</div>
+  <h1>ISAAC-Z <span>統合ネットワーク</span></h1>
+  <div class="subtitle">思想勢力管制システムへようこそ</div>
+</header>
+
+<main>
+  <div class="nav-grid">
+    <a class="nav-card" href="isaac_z_command_board.html">
+      <div class="nav-code">MODULE 01</div>
+      <div class="nav-title">戦況管制盤</div>
+      <div class="nav-desc">14勢力の勢力ファイル、危険度、内紛予想レーダーを収録した統合作戦指揮所。</div>
+      <div class="nav-go">&gt; ACCESS COMMAND BOARD</div>
+    </a>
+    <a class="nav-card" href="isaac_z_flags.html">
+      <div class="nav-code">MODULE 02</div>
+      <div class="nav-title">旗章一覧</div>
+      <div class="nav-desc">意匠局制定、全14勢力の公式旗デザイン集。</div>
+      <div class="nav-go">&gt; ACCESS FLAG REGISTRY</div>
+    </a>
+  </div>
+</main>
+
+<footer>ISAAC-Z SERVER &mdash; NETWORK PORTAL V1 &mdash; ゲーム派閥等は対象外</footer>
+</body>
+</html>

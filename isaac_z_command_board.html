@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ISAAC-Z 思想勢力管制盤</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#060605;
+    --panel:#0C0D0A;
+    --panel2:#111309;
+    --line:#2A2E22;
+    --line-dim:#1A1C14;
+    --paper:#C9C6B4;
+    --paper-dim:#7A785F;
+    --amber:#C4923A;
+    --amber-dim:#6E5424;
+    --green:#6FA02F;
+    --red:#A6402C;
+    --red-dim:#4A241C;
+    --blood:#3B0A0A;
+    --blood2:#5C1414;
+    --scope:#3FBF8F;
+    --scope-dim:#1F5C43;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--paper);
+    font-family:'IBM Plex Mono', monospace;
+    padding:0 0 60px;
+    position:relative;
+    background-image:
+      linear-gradient(var(--line-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-dim) 1px, transparent 1px);
+    background-size:28px 28px;
+  }
+  .blood-decal{ position:absolute; pointer-events:none; z-index:-1; }
+  .scanline{
+    position:fixed; top:0; left:0; width:100%; height:2px;
+    background:linear-gradient(90deg, transparent, var(--green), transparent);
+    opacity:0.35;
+    animation:scan 6s linear infinite;
+  }
+  @media (prefers-reduced-motion:reduce){ .scanline{animation:none; display:none;} .blink{animation:none !important;} }
+  @keyframes scan{ 0%{top:0%;} 100%{top:100%;} }
+
+  header{
+    border-bottom:2px solid var(--amber-dim);
+    padding:28px 32px 20px;
+    position:relative;
+  }
+  .eyebrow{
+    font-size:12px; letter-spacing:0.18em; color:var(--amber);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+  h1{
+    font-family:'Oswald', sans-serif;
+    font-weight:700;
+    font-size:clamp(28px,5vw,44px);
+    letter-spacing:0.03em;
+    color:var(--paper);
+    margin-top:10px;
+  }
+  h1 span{color:var(--green);}
+  .subtitle{
+    color:var(--paper-dim); font-size:13px; margin-top:8px; letter-spacing:0.04em;
+  }
+  .readout{
+    margin-top:16px; display:flex; gap:28px; flex-wrap:wrap;
+    font-size:12px; color:var(--paper-dim);
+  }
+  .readout b{color:var(--green); font-weight:600;}
+  .dot{
+    width:8px; height:8px; border-radius:50%; background:var(--green);
+    display:inline-block; margin-right:6px; animation:blink 1.6s ease-in-out infinite;
+  }
+  @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:0.25;} }
+
+  main{ padding:28px 32px; }
+
+  .sector{ margin-bottom:36px; }
+  .sector-head{
+    display:flex; align-items:baseline; gap:14px; margin-bottom:14px;
+    border-left:3px solid var(--amber); padding-left:12px;
+  }
+  .sector-code{
+    font-family:'Oswald', sans-serif; font-weight:600; font-size:14px;
+    color:var(--amber); letter-spacing:0.08em;
+  }
+  .sector-name{
+    font-family:'Oswald', sans-serif; font-weight:600; font-size:20px;
+    color:var(--paper); letter-spacing:0.02em;
+  }
+  .sector-note{ font-size:12px; color:var(--paper-dim); margin-left:auto; text-align:right; }
+
+  .grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+    gap:14px;
+  }
+
+  .card{
+    background:
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.35) 0 1px, transparent 1px 3px),
+      var(--panel);
+    border:1px solid var(--line);
+    position:relative;
+    padding:16px 18px 18px;
+    box-shadow:inset 0 0 26px rgba(0,0,0,0.65), inset 0 0 0 1px rgba(63,191,143,0.06);
+  }
+  .code{ font-size:11px; color:var(--paper-dim); letter-spacing:0.06em; }
+  .code::before{
+    content:''; display:inline-block; width:6px; height:6px; border-radius:50%;
+    background:var(--scope); box-shadow:0 0 5px var(--scope);
+    margin-right:6px; vertical-align:middle;
+  }
+  .card.flag .code::before, .card.crit-pulse .code::before{
+    background:var(--red); box-shadow:0 0 5px var(--red); animation:siren 0.9s ease-in-out infinite;
+  }
+  .name{
+    font-family:'Oswald', sans-serif; font-weight:600; font-size:19px;
+    margin-top:10px; color:var(--paper);
+    text-shadow:0 0 8px rgba(63,191,143,0.3);
+  }
+  .card.flag .name{ text-shadow:0 0 8px rgba(166,64,44,0.45); }
+  .card::before, .card::after,
+  .card .cA, .card .cB{
+    content:''; position:absolute; width:10px; height:10px;
+    border-color:var(--amber-dim); border-style:solid;
+  }
+  .card::before{ top:-1px; left:-1px; border-width:2px 0 0 2px; }
+  .card::after{ bottom:-1px; right:-1px; border-width:0 2px 2px 0; }
+  .card .cA{ top:-1px; right:-1px; border-width:2px 2px 0 0; }
+  .card .cB{ bottom:-1px; left:-1px; border-width:0 0 2px 2px; }
+
+  .card.flag{ border-color:var(--red-dim); background:#1E1712; }
+  .card.flag::before, .card.flag::after, .card.flag .cA, .card.flag .cB{ border-color:var(--red); }
+
+  .card.mark{ border-color:var(--green); }
+
+  .card-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
+  .tag{
+    font-size:10px; letter-spacing:0.05em; padding:2px 7px; border:1px solid var(--line);
+    color:var(--paper-dim); white-space:nowrap;
+  }
+  .tag.alert{ color:var(--red); border-color:var(--red); }
+  .tag.ok{ color:var(--green); border-color:var(--green); }
+  .tag.note{ color:var(--amber); border-color:var(--amber-dim); }
+  .tag.lv{ font-weight:600; }
+  .tag.lv1, .tag.lv2{ color:var(--green); border-color:var(--green); }
+  .tag.lv3{ color:var(--amber); border-color:var(--amber); }
+  .tag.lv4, .tag.lv5{ color:var(--red); border-color:var(--red); }
+  .card-tags{ display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+
+  .netwrap{ background:var(--panel); border:1px solid var(--line); padding:20px; position:relative; }
+  .net-legend{
+    display:flex; gap:22px; flex-wrap:wrap; font-size:11px; color:var(--paper-dim);
+    margin-top:14px; border-top:1px solid var(--line-dim); padding-top:12px;
+  }
+  .net-legend b{ color:var(--paper); font-weight:600; }
+  .swatch{ display:inline-block; width:16px; height:2px; margin-right:6px; vertical-align:middle; }
+
+  .alertbar{
+    background:repeating-linear-gradient(135deg, var(--red) 0 14px, #2A1410 14px 28px);
+    color:#F2E8DE; font-family:'Oswald', sans-serif; font-weight:600;
+    font-size:13px; letter-spacing:0.12em; text-align:center;
+    padding:8px 12px; border-bottom:2px solid var(--red);
+    animation:alertflash 1.4s ease-in-out infinite;
+  }
+  @keyframes alertflash{ 0%,100%{opacity:1;} 50%{opacity:0.72;} }
+
+  .defcon{
+    display:flex; align-items:center; gap:8px; font-size:12px;
+  }
+  .defcon-bars{ display:flex; gap:3px; }
+  .defcon-bars i{ width:10px; height:14px; background:var(--line); display:inline-block; }
+  .defcon-bars i.on{ background:var(--red); }
+
+  .stamp{
+    position:absolute; top:14px; right:24px;
+    border:3px solid var(--red); color:var(--red);
+    font-family:'Oswald', sans-serif; font-weight:700; font-size:13px;
+    letter-spacing:0.15em; padding:4px 10px; transform:rotate(-8deg);
+    opacity:0.85; pointer-events:none;
+  }
+
+  .card.flag{
+    background:
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.35) 0 1px, transparent 1px 3px),
+      repeating-linear-gradient(135deg, #1E1712 0 16px, #241611 16px 32px);
+  }
+  .card.crit-pulse{ animation:critpulse 1.8s ease-in-out infinite; }
+  @keyframes critpulse{ 0%,100%{ box-shadow:0 0 0 1px var(--red) inset; } 50%{ box-shadow:0 0 0 1px var(--red-dim) inset; } }
+
+  .glitch{ position:relative; }
+
+  .siren-dot{
+    width:8px; height:8px; border-radius:50%; background:var(--red);
+    display:inline-block; margin-right:6px; animation:siren 0.9s ease-in-out infinite;
+  }
+  @keyframes siren{ 0%,100%{opacity:1; box-shadow:0 0 4px var(--red);} 50%{opacity:0.3; box-shadow:none;} }
+
+  .cic-strip{
+    display:flex; gap:1px; background:var(--line);
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  }
+  .cic-panel{
+    flex:1; min-width:110px; background:var(--panel); padding:8px 12px;
+    font-size:10px; letter-spacing:0.1em; color:var(--paper-dim);
+  }
+  .cic-panel .light{
+    width:6px; height:6px; border-radius:50%; display:inline-block; margin-right:6px;
+  }
+  .cic-panel .light.nominal{ background:var(--scope); box-shadow:0 0 4px var(--scope); }
+  .cic-panel .light.alert{ background:var(--red); animation:siren 0.9s ease-in-out infinite; }
+  .cic-panel b{ display:block; color:var(--paper); font-size:12px; font-family:'Oswald', sans-serif; margin-top:3px; letter-spacing:0.03em; }
+
+  .sitenav{ display:flex; gap:16px; padding:6px 32px; font-size:11px; background:var(--panel2); border-bottom:1px solid var(--line-dim); }
+  .sitenav a{ color:var(--paper-dim); text-decoration:none; letter-spacing:0.06em; }
+  .sitenav a:hover, .sitenav a.current{ color:var(--scope); }
+
+  .rivet{ position:absolute; width:5px; height:5px; border-radius:50%; background:var(--line); box-shadow:inset 0 0 0 1px #000; }
+  .netwrap .rivet:nth-of-type(1), header .rivet:nth-of-type(1){ top:6px; left:6px; }
+  .netwrap .rivet:nth-of-type(2), header .rivet:nth-of-type(2){ top:6px; right:6px; }
+  .netwrap .rivet:nth-of-type(3), header .rivet:nth-of-type(3){ bottom:6px; left:6px; }
+  .netwrap .rivet:nth-of-type(4), header .rivet:nth-of-type(4){ bottom:6px; right:6px; }
+
+  .scope-wrap{ position:relative; display:flex; justify-content:center; }
+  .scope-ring{
+    position:absolute; border-radius:50%; border:1px solid var(--scope-dim);
+    top:50%; left:50%; transform:translate(-50%,-50%);
+  }
+  .scope-sweep{
+    position:absolute; top:50%; left:50%; width:290px; height:290px;
+    transform:translate(-50%,-50%);
+    background:conic-gradient(from 0deg, rgba(63,191,143,0.32), rgba(63,191,143,0) 55deg, transparent 360deg);
+    border-radius:50%;
+    animation:sweep 4s linear infinite;
+  }
+  @media (prefers-reduced-motion:reduce){ .scope-sweep{ animation:none; } }
+  @keyframes sweep{ 0%{transform:translate(-50%,-50%) rotate(0deg);} 100%{transform:translate(-50%,-50%) rotate(360deg);} }
+  .scope-crosshair{ position:absolute; background:var(--scope-dim); }
+  #forecast-svg circle{ transition:r .2s ease, stroke-width .2s ease; }
+  #forecast-svg g[id^="node-"] text{ transition:font-size .2s ease; }
+  #forecast-svg g.pinged text{ font-size:14px; font-weight:600; }
+
+  .vignette{
+    position:fixed; inset:0; pointer-events:none; z-index:1000;
+    background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%);
+  }
+
+  .boot-log{
+    font-size:11px; color:var(--scope); padding:6px 32px;
+    white-space:nowrap; overflow:hidden; border-bottom:1px solid var(--line-dim);
+    width:0; animation:type 2.6s steps(38,end) forwards;
+  }
+  .boot-log::after{ content:'\2588'; margin-left:3px; animation:blink 1s step-end infinite; }
+  @keyframes type{ from{width:0;} to{width:38ch;} }
+  @media (prefers-reduced-motion:reduce){ .boot-log{ width:38ch; animation:none; } }
+
+  .emblem{ flex-shrink:0; }
+  .emblem circle{ fill:none; stroke:var(--scope); }
+  .emblem text{ font-family:'Oswald', sans-serif; font-weight:600; fill:var(--scope); }
+  .emblem line{ stroke:var(--scope-dim); }
+
+  .head-row{ display:flex; align-items:center; gap:18px; }
+  .head-row .htext{ flex:1; min-width:0; }
+
+  .slogan{
+    font-size:13px; color:var(--paper-dim); margin-top:6px;
+    border-left:2px solid var(--line); padding-left:8px;
+  }
+  .card.flag .slogan{ color:#C9A99A; border-left-color:var(--red-dim); }
+
+  .relation{
+    margin-top:18px; font-size:12px; color:var(--paper-dim);
+    display:flex; align-items:center; gap:10px;
+  }
+  .relation .arrow{ color:var(--amber); }
+
+  footer{
+    padding:20px 32px 0; font-size:11px; color:var(--paper-dim);
+    border-top:1px solid var(--line-dim); margin-top:20px;
+  }
+</style>
+</head>
+<body>
+<svg style="position:absolute;width:0;height:0" aria-hidden="true">
+  <symbol id="blood-splatter" viewBox="0 0 200 200">
+    <path d="M100,40 C130,35 152,54 146,78 C172,84 178,112 154,122 C166,142 138,158 118,146 C114,172 82,176 74,150 C48,156 32,134 50,114 C22,104 28,74 56,68 C48,42 82,28 100,40 Z"/>
+    <circle cx="38" cy="152" r="7"/>
+    <circle cx="26" cy="168" r="3.5"/>
+    <circle cx="163" cy="58" r="6"/>
+    <circle cx="178" cy="42" r="3"/>
+    <circle cx="20" cy="90" r="4"/>
+    <path d="M120,150 C123,166 118,182 111,180 C106,178 109,160 114,150 Z"/>
+    <path d="M170,120 C182,126 190,138 184,144 C179,148 168,140 165,128 Z"/>
+  </symbol>
+</svg>
+
+<div class="sitenav">
+  <a href="index.html">&#9670; TOP</a>
+  <a href="isaac_z_command_board.html" class="current">戦況管制盤</a>
+  <a href="isaac_z_flags.html">旗章一覧</a>
+</div>
+
+<div class="scanline"></div>
+<div class="vignette"></div>
+<div class="boot-log">&gt; ISAAC-Z NET LINK ESTABLISHED... 権限確認OK...</div>
+<div class="alertbar"><span class="siren-dot"></span>厳戒態勢 CONDITION RED &mdash; 全面抗争発生の恐れ &mdash; 各セクター警戒を強化せよ<span class="siren-dot"></span></div>
+
+<header>
+  <span class="rivet"></span><span class="rivet"></span><span class="rivet"></span><span class="rivet"></span>
+  <svg class="blood-decal" style="top:-20px; left:-10px; width:130px; height:130px; fill:var(--blood); opacity:0.6; transform:rotate(-18deg);"><use href="#blood-splatter"/></svg>
+  <svg class="blood-decal" style="top:10px; right:120px; width:90px; height:90px; fill:var(--blood2); opacity:0.4; transform:rotate(35deg);"><use href="#blood-splatter"/></svg>
+  <div class="stamp">機密 / CLASSIFIED</div>
+  <div class="head-row">
+    <svg class="emblem" width="64" height="64" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" stroke-width="1.5"/>
+      <circle cx="50" cy="50" r="38" stroke-width="1"/>
+      <line x1="50" y1="6" x2="50" y2="16"/><line x1="50" y1="84" x2="50" y2="94"/>
+      <line x1="6" y1="50" x2="16" y2="50"/><line x1="84" y1="50" x2="94" y2="50"/>
+      <text x="50" y="58" font-size="26" text-anchor="middle">IZ</text>
+    </svg>
+    <div class="htext">
+      <div class="eyebrow">
+        <span>ISAAC-Z HIGH COMMAND // 統合作戦指揮所</span>
+        <span>REV.6 &mdash; WARTIME</span>
+      </div>
+      <h1>思想勢力 <span>戦況管制盤</span></h1>
+      <div class="subtitle">アイザックZサーバー ベース思想一覧 &mdash; 全面抗争シナリオ想定 / 内紛予想付き</div>
+    </div>
+  </div>
+  <div class="readout">
+    <div><span class="dot"></span><b>14</b> 勢力を捕捉 / 交戦リスク上昇中</div>
+    <div>SECTORS: <b>A</b> 国家体制 / <b>B</b> 加速 / <b>C</b> 軍事ドクトリン / <b>D</b> 終末・宗教</div>
+    <div class="defcon">脅威度<div class="defcon-bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>4/5</div>
+    <div id="clock">&#8212;&#8212;:&#8212;&#8212;:&#8212;&#8212;</div>
+    <div>編纂責任者: アイザック主義</div>
+  </div>
+</header>
+
+<div class="cic-strip">
+  <div class="cic-panel"><span class="light nominal"></span>SECTOR A<b>安定</b></div>
+  <div class="cic-panel"><span class="light alert"></span>SECTOR B<b>異端検知</b></div>
+  <div class="cic-panel"><span class="light nominal"></span>SECTOR C<b>安定</b></div>
+  <div class="cic-panel"><span class="light alert"></span>SECTOR D<b>終末リスク</b></div>
+  <div class="cic-panel"><span class="light alert"></span>予測プロット<b>交戦8件</b></div>
+</div>
+
+<main>
+
+  <div class="sector">
+    <div class="sector-head">
+      <span class="sector-code">SECTOR A</span>
+      <span class="sector-name">国家体制系</span>
+      <span class="sector-note">5勢力 / 内1件統合済</span>
+    </div>
+    <div class="grid">
+      <div class="card" onmouseenter="pingNode('peace',true)" onmouseleave="pingNode('peace',false)"><span class="cA"></span><span class="cB"></span>
+        <div class="card-top"><span class="code">A-01</span><div class="card-tags"><span class="tag">通常</span><span class="tag lv lv1">LV.1</span></div></div>
+        <div class="name">平和主義</div>
+        <div class="slogan">平和あれ</div>
+      </div>
+      <div class="card" onmouseenter="pingNode('democracy',true)" onmouseleave="pingNode('democracy',false)"><span class="cA"></span><span class="cB"></span>
+        <div class="card-top"><span class="code">A-02</span><div class="card-tags"><span class="tag">通常</span><span class="tag lv lv1">LV.1</span></div></div>
+        <div class="name">民主主義</div>
+        <div class="slogan">民主主義ここに復活</div>
+      </div>
+      <div class="card" onmouseenter="pingNode('communism',true)" onmouseleave="pingNode('communism',false)"><span class="cA"></span><span class="cB"></span>
+        <div class="card-top"><span class="code">A-03</span><div class="card-tags"><span class="tag note">内部分裂</span><span class="tag lv lv3">LV.3</span></div></div>
+        <div class="name">共産主義</div>
+        <div class="slogan">いつもの &mdash; 一国革命派 / 全世界革命派</div>
+      </div>
+      <div class="card" onmouseenter="pingNode('anarchism',true)" onmouseleave="pingNode('anarchism',false)"><span class="cA"></span><span class="cB"></span>
+        <div class="card-top"><span class="code">A-04</span><div class="card-tags"><span class="tag">通常</span><span class="tag lv lv4">LV.4</span></div></div>
+        <div class="name">無政府主義</div>
+        <div class="slogan">ホッホッホー</div>
+      </div>
+      <div class="card mark" onmouseenter="pingNode('imperialism',true)" onmouseleave="pingNode('imperialism',false)"><span class="cA"></span><span class="cB"></span>
+        <div class="card-top"><span class="code">A-05</span><div class="card-tags"><span class="tag ok">統合済</span><span class="tag lv lv3">LV.3</span></div></div>
+        <div class="name">帝国主義</div>
+        <div class="slogan">帝国万歳 &mdash; 統制派と皇道派の対立を克服</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sector" style="position:relative;">
+    <svg class="blood-decal" style="bottom:-30px; right:-20px; width:110px; height:110px; fill:var(--blood); opacity:0.45; transform:rotate(60deg);"><use href="#blood-splatter"/></svg>
+    <div class="sector-head">
+      <span class="sector-code">SECTOR B</span>
+      <span class="sector-name">加速系</span>
+      <span class="sector-note">2勢力 / 分派1件</span>
+    </div>
+    <div class="grid">
+      <div class="card" onmouseenter="pingNode('accel',true)" onmouseleave="pingNode('accel',false)"><span class="cA"></span><span class="cB"></span>
+        <div class="card-top"><span class="code">B-01</span><div class="card-tags"><span class="tag">本流</span><span class="tag lv lv4">LV.4</span></div></div>
+        <div class="name">加速主義</div>
+        <div class="slogan">未来へ加速せよ!</div>
+      </div>
+      <div class="card flag crit-pulse" onmouseenter="pingNode('accelover',true)" onmouseleave="pingNode('accelover',false)"><span class="cA"></span><span class="cB"></span>
+        <div class="card-top"><span class="code">B-02</span><div class="card-tags"><span class="tag alert">分派・異端</span><span class="tag lv lv5">LV.5</span></div></div>
+        <div class="name">加速過食主義</div>
+        <div class="slogan">加速主義は異端児だ!!</div>
+      </div>
+    </div>
+    <div class="relation"><span class="arrow">&#8618;</span> B-01 から B-02 が分離</div>
+  </div>
+
+  <div class="sector">
+    <div class="sector-head">
+      <span class="sector-code">SECTOR C</span>
+      <span class="sector-name">軍事ドクトリン系</span>
+      <span class="sector-note">3勢力</span>
+    </div>
+    <div class="grid">
+      <div class="card" onmouseenter="pingNode('dread',true)" onmouseleave="pingNode('dread',false)"><span class="cA"></span><span class="cB"></span>
+        <div class="card-top"><span class="code">C-01</span><div class="card-tags"><span class="tag">通常</span><span class="tag lv lv2">LV.2</span></div></div>
+        <div class="name">大艦巨砲主義</div>
+        <div class="slogan">海軍魔理沙定期</div>
+      </div>
+      <div class="card" onmouseenter="pingNode('danmaku',true)" onmouseleave="pingNode('danmaku',false)"><span class="cA"></span><span class="cB"></span>
+        <div class="card-top"><span class="code">C-02</span><div class="card-tags"><span class="tag">通常</span><span class="tag lv lv2">LV.2</span></div></div>
+        <div class="name">弾幕主義</div>
+        <div class="slogan">ダンマキスト(スタンプ存在)</div>
+      </div>
+      <div class="card" onmouseenter="pingNode('yamato',true)" onmouseleave="pingNode('yamato',false)"><span class="cA"></span><span class="cB"></span>
+        <div class="card-top"><span class="code">C-03</span><div class="card-tags"><span class="tag">通常</span><span class="tag lv lv3">LV.3</span></div></div>
+        <div class="name">45口径46糎三連装機関砲連盟</div>
+        <div class="slogan">四六センチあれば大体解決する</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sector" style="position:relative;">
+    <svg class="blood-decal" style="top:-10px; left:-30px; width:140px; height:140px; fill:var(--blood2); opacity:0.5; transform:rotate(-40deg);"><use href="#blood-splatter"/></svg>
+    <div class="sector-head">
+      <span class="sector-code">SECTOR D</span>
+      <span class="sector-name">終末・宗教系</span>
+      <span class="sector-note">4勢力 / 教会と主義は別物</span>
+    </div>
+    <div class="grid">
+      <div class="card flag crit-pulse" onmouseenter="pingNode('antinatalism',true)" onmouseleave="pingNode('antinatalism',false)"><span class="cA"></span><span class="cB"></span>
+        <div class="card-top"><span class="code">D-01</span><div class="card-tags"><span class="tag">通常</span><span class="tag lv lv5">LV.5</span></div></div>
+        <div class="name">反出生主義</div>
+        <div class="slogan">人類に幸せな終焉を!!</div>
+      </div>
+      <div class="card flag crit-pulse" onmouseenter="pingNode('blackleague',true)" onmouseleave="pingNode('blackleague',false)"><span class="cA"></span><span class="cB"></span>
+        <div class="card-top"><span class="code">D-02</span><div class="card-tags"><span class="tag">通常</span><span class="tag lv lv5">LV.5</span></div></div>
+        <div class="name">全ロシア黒連盟</div>
+        <div class="slogan">大審判は実行される</div>
+      </div>
+      <div class="card" onmouseenter="pingNode('church',true)" onmouseleave="pingNode('church',false)"><span class="cA"></span><span class="cB"></span>
+        <div class="card-top"><span class="code">D-03</span><div class="card-tags"><span class="tag">通常</span><span class="tag lv lv3">LV.3</span></div></div>
+        <div class="name">アイザックZ教会</div>
+        <div class="slogan">唯一絶対のアイザックZ神あり</div>
+      </div>
+      <div class="card mark" onmouseenter="pingNode('isaacism',true)" onmouseleave="pingNode('isaacism',false)"><span class="cA"></span><span class="cB"></span>
+        <div class="card-top"><span class="code">D-04</span><div class="card-tags"><span class="tag ok">編纂責任者在籍</span><span class="tag lv lv2">LV.2</span></div></div>
+        <div class="name">アイザック主義</div>
+        <div class="slogan">我が大罪</div>
+      </div>
+    </div>
+    <div class="relation">D-03(教会)と D-04(主義)は別系統として管理</div>
+  </div>
+
+  <div class="sector">
+    <div class="sector-head">
+      <span class="sector-code">FORECAST</span>
+      <span class="sector-name">内紛予想図 &mdash; 交戦ライン</span>
+      <span class="sector-note"><span class="siren-dot"></span>8ラインで衝突を検知</span>
+    </div>
+    <div class="netwrap">
+      <span class="rivet"></span><span class="rivet"></span><span class="rivet"></span><span class="rivet"></span>
+      <svg id="forecast-svg" width="100%" viewBox="0 0 600 620" role="img">
+        <title>内紛予想図</title>
+        <desc>14勢力の対立関係を示すレーダー式プロット図。赤線は高リスク、橙線は中リスクの対立を示す</desc>
+
+        <circle cx="300" cy="300" r="270" fill="none" stroke="#1F5C43" stroke-width="1" stroke-dasharray="2 6"/>
+        <circle cx="300" cy="300" r="200" fill="none" stroke="#1F5C43" stroke-width="1" stroke-dasharray="2 6"/>
+        <circle cx="300" cy="300" r="130" fill="none" stroke="#1F5C43" stroke-width="1" stroke-dasharray="2 6"/>
+        <circle cx="300" cy="300" r="60"  fill="none" stroke="#1F5C43" stroke-width="1" stroke-dasharray="2 6"/>
+        <line x1="300" y1="30" x2="300" y2="570" stroke="#1F5C43" stroke-width="1"/>
+        <line x1="30" y1="300" x2="570" y2="300" stroke="#1F5C43" stroke-width="1"/>
+        <text x="304" y="42" fill="#7A785F" font-size="10" font-family="IBM Plex Mono">000</text>
+        <text x="540" y="296" fill="#7A785F" font-size="10" font-family="IBM Plex Mono">090</text>
+        <text x="304" y="586" fill="#7A785F" font-size="10" font-family="IBM Plex Mono">180</text>
+        <text x="36"  y="296" fill="#7A785F" font-size="10" font-family="IBM Plex Mono">270</text>
+
+        <path d="M300,300 L300,30 A270,270 0 0,1 434,97 Z" fill="#3FBF8F" opacity="0.22">
+          <animateTransform attributeName="transform" type="rotate" from="0 300 300" to="360 300 300" dur="4.5s" repeatCount="indefinite"/>
+        </path>
+
+        <line x1="452" y1="472" x2="354" y2="523" stroke="#C0503A" stroke-width="2"/>
+        <line x1="528" y1="272" x2="515" y2="381" stroke="#C0503A" stroke-width="2"/>
+        <line x1="84"  y1="381" x2="71"  y2="272" stroke="#C0503A" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <line x1="84"  y1="381" x2="110" y2="169" stroke="#C0503A" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <line x1="71"  y1="272" x2="110" y2="169" stroke="#C0503A" stroke-width="2"/>
+        <line x1="300" y1="70"  x2="515" y2="381" stroke="#8A6B2C" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <line x1="406" y1="95"  x2="528" y2="272" stroke="#8A6B2C" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <line x1="489" y1="169" x2="515" y2="381" stroke="#8A6B2C" stroke-width="1.5" stroke-dasharray="5 4"/>
+
+        <g id="node-peace"><circle cx="300" cy="70"  r="9" fill="#0C0D0A" stroke="#3FBF8F" stroke-width="1.5"/><text x="300" y="47" text-anchor="middle" fill="#C9C6B4" font-size="12" font-family="IBM Plex Mono">平和主義</text></g>
+        <g id="node-democracy"><circle cx="406" cy="95"  r="9" fill="#0C0D0A" stroke="#3FBF8F" stroke-width="1.5"/><text x="440" y="82" text-anchor="middle" fill="#C9C6B4" font-size="12" font-family="IBM Plex Mono">民主主義</text></g>
+        <g id="node-communism"><circle cx="489" cy="169" r="9" fill="#0C0D0A" stroke="#C4923A" stroke-width="1.5"/><text x="540" y="163" text-anchor="middle" fill="#C9C6B4" font-size="12" font-family="IBM Plex Mono">共産主義</text></g>
+        <g id="node-anarchism"><circle cx="528" cy="272" r="9" fill="#0C0D0A" stroke="#A6402C" stroke-width="1.5"/><text x="575" y="268" text-anchor="middle" fill="#C9C6B4" font-size="12" font-family="IBM Plex Mono">無政府主義</text></g>
+        <g id="node-imperialism"><circle cx="515" cy="381" r="9" fill="#0C0D0A" stroke="#C4923A" stroke-width="1.5"/><text x="565" y="390" text-anchor="middle" fill="#C9C6B4" font-size="12" font-family="IBM Plex Mono">帝国主義</text></g>
+        <g id="node-accel"><circle cx="452" cy="472" r="9" fill="#0C0D0A" stroke="#A6402C" stroke-width="1.5"/><text x="470" y="497" text-anchor="middle" fill="#C9C6B4" font-size="12" font-family="IBM Plex Mono">加速主義</text></g>
+        <g id="node-accelover"><circle cx="354" cy="523" r="9" fill="#0C0D0A" stroke="#A6402C" stroke-width="1.5"/><text x="380" y="548" text-anchor="middle" fill="#C9C6B4" font-size="12" font-family="IBM Plex Mono">加速過食主義</text></g>
+        <g id="node-dread"><circle cx="245" cy="523" r="9" fill="#0C0D0A" stroke="#3FBF8F" stroke-width="1.5"/><text x="245" y="548" text-anchor="middle" fill="#C9C6B4" font-size="12" font-family="IBM Plex Mono">大艦巨砲主義</text></g>
+        <g id="node-danmaku"><circle cx="147" cy="472" r="9" fill="#0C0D0A" stroke="#3FBF8F" stroke-width="1.5"/><text x="130" y="497" text-anchor="middle" fill="#C9C6B4" font-size="12" font-family="IBM Plex Mono">弾幕主義</text></g>
+        <g id="node-yamato"><circle cx="300" cy="580" r="9" fill="#0C0D0A" stroke="#C4923A" stroke-width="1.5"/><text x="300" y="605" text-anchor="middle" fill="#C9C6B4" font-size="11" font-family="IBM Plex Mono">四六糎連盟</text></g>
+        <g id="node-antinatalism"><circle cx="84"  cy="381" r="9" fill="#0C0D0A" stroke="#A6402C" stroke-width="1.5"/><text x="55" y="390" text-anchor="middle" fill="#C9C6B4" font-size="12" font-family="IBM Plex Mono">反出生主義</text></g>
+        <g id="node-blackleague"><circle cx="71"  cy="272" r="9" fill="#0C0D0A" stroke="#A6402C" stroke-width="1.5"/><text x="45" y="268" text-anchor="middle" fill="#C9C6B4" font-size="12" font-family="IBM Plex Mono">全ロシア黒連盟</text></g>
+        <g id="node-church"><circle cx="110" cy="169" r="9" fill="#0C0D0A" stroke="#C4923A" stroke-width="1.5"/><text x="70" y="163" text-anchor="middle" fill="#C9C6B4" font-size="12" font-family="IBM Plex Mono">アイザックZ教会</text></g>
+        <g id="node-isaacism"><circle cx="193" cy="95"  r="9" fill="#0C0D0A" stroke="#3FBF8F" stroke-width="1.5"/><text x="165" y="82" text-anchor="middle" fill="#C9C6B4" font-size="12" font-family="IBM Plex Mono">アイザック主義</text></g>
+      </svg>
+      <div class="net-legend">
+        <div><span class="swatch" style="background:#C0503A"></span><b>高リスク</b> &mdash; 実力衝突・分派化の懸念あり</div>
+        <div><span class="swatch" style="background:#8A6B2C"></span><b>中リスク</b> &mdash; 路線対立・論争レベル</div>
+        <div>実線=既発 / 破線=予測</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer style="position:relative;">
+  <svg class="blood-decal" style="top:-20px; left:20px; width:100px; height:100px; fill:var(--blood); opacity:0.4; transform:rotate(10deg);"><use href="#blood-splatter"/></svg>
+  <svg class="blood-decal" style="top:-10px; right:40px; width:70px; height:70px; fill:var(--blood2); opacity:0.35; transform:rotate(-25deg);"><use href="#blood-splatter"/></svg>
+  ISAAC-Z SERVER &mdash; 統合作戦指揮所 戦況記録 V6 &mdash; 本資料は内部限り、外部への流出・転載を禁ず &mdash; ゲーム派閥等は対象外
+  <div style="margin-top:6px; color:var(--paper-dim); opacity:0.7;">DOC No. IZ-CIC-0006 &mdash; PAGE 1/1</div>
+</footer>
+
+<script>
+function tick(){
+  var d = new Date();
+  var p = function(n){ return String(n).padStart(2,'0'); };
+  var el = document.getElementById('clock');
+  if(el){ el.textContent = p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds()); }
+}
+tick();
+setInterval(tick, 1000);
+
+function pingNode(id, on){
+  var g = document.getElementById('node-'+id);
+  if(!g) return;
+  var c = g.querySelector('circle');
+  if(c){ c.setAttribute('r', on ? '15' : '9'); c.setAttribute('stroke-width', on ? '3' : '1.5'); }
+  g.classList.toggle('pinged', on);
+}
+</script>
+</body>
+</html>
